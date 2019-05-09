@@ -6,7 +6,6 @@ Created on Thu May  9 09:36:52 2019
 """
 
 #1-feature engineering, choosing classifier, 
-
 import numpy as np
 from sklearn.neighbors import KNeighborsClassifier
 import matplotlib.pyplot as plt
@@ -40,7 +39,6 @@ individualFruitNames = dict(zip(fruitsData.fruit_label.unique(), fruitsData.frui
 #Scatter matrix checks whether numeric variables are correlated 
 #and if correlation is positive or negative
 
-
 X = fruitsData[['height', 'width', 'mass', 'color_score']]
 y = fruitsData['fruit_label']
 
@@ -64,17 +62,17 @@ plt.show()
 # After detecting the most prominent variables from our data visualization,
 #we select  mass, width, and height as features for our classification
 X = fruitsData[['mass', 'width', 'height']]
-y = fruitsData['fruit_label']
+Y = fruitsData['fruit_label']
 
 #spliting dataset into training and test sets for classification purpose after choosing relevant vars
 #- 75/25 default if unspecified
-XTrainSet, XTestSet, YTrainSet, YTestSet = train_test_split(X, y, random_state=0)
+XTrainSet, XTestSet, YTrainSet, YTestSet = train_test_split(X, Y, random_state=0)
 
 #choose a classifier
+knnClassifier = KNeighborsClassifier(n_neighbors = 5)
 
-knn = KNeighborsClassifier(n_neighbors = 5)
-
-
+# train classifer with training data
+knnClassifier.fit(XTrainSet, YTrainSet)
 
 
 
