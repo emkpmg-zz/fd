@@ -4,9 +4,9 @@ Created on Thu May  9 09:36:52 2019
 
 @author: PIANDT
 """
-
 #1-feature engineering, choosing classifier, 
 import numpy as np
+from otherFunctions import fruitCluster
 from sklearn.neighbors import KNeighborsClassifier
 import matplotlib.pyplot as plt
 from matplotlib import cm
@@ -14,7 +14,6 @@ import pandas as pd
 from pandas.plotting import scatter_matrix
 #from mpl_toolkits.mplot3d import Axes3D
 from sklearn.model_selection import train_test_split
-
 
 fruitsData = pd.read_table('fruit_data_with_colors.txt')
 
@@ -68,13 +67,54 @@ Y = fruitsData['fruit_label']
 #- 75/25 default if unspecified
 XTrainSet, XTestSet, YTrainSet, YTestSet = train_test_split(X, Y, random_state=0)
 
-#choose a classifier
-knnClassifier = KNeighborsClassifier(n_neighbors = 5)
+#check sensitivity of KNN classifier accuracy to K size
+knnRange = range(1,20)
+knnAccuracy = []
+for i in knnRange:
+    knnClassifier = KNeighborsClassifier(n_neighbors = i)
+    knnClassifier.fit(XTrainSet, YTrainSet)
+    knnAccuracy.append(knnClassifier.score(XTestSet, YTestSet))
+plt.figure()
+plt.xlabel('K-Size')
+plt.ylabel('Model accuracy')
+plt.scatter(knnRange, knnAccuracy)
+plt.xticks([0,5,10,15,20]);
+
+#check sensitivity of KNN classifier accuracy to training and test split sizes
+#using K size 3 
+t = [0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2]
+knn = KNeighborsClassifier(n_neighbors = 3)
+plt.figure()
+for s in t:
+    scores = []
+    for i in range(1,1000):
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 1-s)
+        knn.fit(X_train, y_train)
+        scores.append(knn.score(X_test, y_test))
+    plt.plot(s, np.mean(scores), 'bo')
+plt.xlabel('Training set proportion (%)')
+plt.ylabel('Model accuracy');
+
+
+#choose a classifier -- with the best K size == 3 in this case
+knnClassifier = KNeighborsClassifier(n_neighbors = 3)
 
 # train classifer with training data
 knnClassifier.fit(XTrainSet, YTrainSet)
 
+#check mean accuracy on training data
+modelAccuracy = knnClassifier.score(XTrainSet, YTrainSet)
+print('Accuracy of KNN classifier :', modelAccuracy)
 
+# Make predictions on unseen data. A small fruit with mass, width, height
+fruitPredict = knnClassifier.predict([[80, 5.3, 7.5]])
+print('Predicted fruit1: ', individualFruitNames[fruitPredict[0]])
+
+fruitPredict = knnClassifier.predict([[180, 7.3, 8.5]])
+print('Predicted fruit2: ', individualFruitNames[fruitPredict[0]])
+
+#Decision Boundary plots with k=3 
+fruitCluster(XTrainSet, YTrainSet, 3, 'uniform')
 
 
 
