@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 import pandas as pd
 from pandas.plotting import scatter_matrix
+from mpl_toolkits.mplot3d import Axes3D
 from sklearn.model_selection import train_test_split
 
 
@@ -42,12 +43,19 @@ individualFruitNames = dict(zip(fruitsData.fruit_label.unique(), fruitsData.frui
 
 X = fruitsData[['height', 'width', 'mass', 'color_score']]
 y = fruitsData['fruit_label']
-X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
+XTrainSet, XTestSet, YTrainSet, YTestSet = train_test_split(X, y, random_state=0)
 colorMap = cm.get_cmap('gnuplot')
-scatterMatrix = scatter_matrix(X_train, c= y_train, marker = '*', s=40, hist_kwds={'bins':20}, figsize=(10,10), cmap=colorMap)
+scatterMatrix = scatter_matrix(XTrainSet, c= YTrainSet, marker = '*', s=40, hist_kwds={'bins':20}, figsize=(10,10), cmap=colorMap)
 
 
-
+# 3D scatter plot
+fig = plt.figure(figsize=(16,16))
+ax = fig.add_subplot(111, projection = '3d')
+ax.scatter(XTrainSet['width'], XTrainSet['height'], XTrainSet['color_score'], c = YTrainSet, marker = '*', s=300)
+ax.set_xlabel('Fruit Width')
+ax.set_ylabel('Fruit Height')
+ax.set_zlabel('color_score')
+plt.show()
 
 
 
