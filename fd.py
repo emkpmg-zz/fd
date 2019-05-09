@@ -4,7 +4,7 @@ Created on Thu May  9 09:36:52 2019
 
 @author: PIANDT
 """
-#1-feature engineering, choosing classifier, 
+ 
 import numpy as np
 from otherFunctions import fruitCluster
 from sklearn.neighbors import KNeighborsClassifier
@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 import pandas as pd
 from pandas.plotting import scatter_matrix
-#from mpl_toolkits.mplot3d import Axes3D
+from mpl_toolkits.mplot3d import Axes3D
 from sklearn.model_selection import train_test_split
 
 fruitsData = pd.read_table('fruit_data_with_colors.txt')
@@ -23,6 +23,7 @@ fruitsData.head()
 #summarized analyses of quantitative data
 fruitsData.describe()
 
+#1-feature engineering, choosing classifier
 # create a dictionary of fruit type (fruit_label) which is numeric
 # and map to the actual fruit name (fruit_name). 
 #This gives a true representation of our output labels or anything we want to classify
