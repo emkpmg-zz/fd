@@ -8,11 +8,12 @@ Created on Thu May  9 09:36:52 2019
 #1-feature engineering, choosing classifier, 
 
 import numpy as np
+from sklearn.neighbors import KNeighborsClassifier
 import matplotlib.pyplot as plt
 from matplotlib import cm
 import pandas as pd
 from pandas.plotting import scatter_matrix
-from mpl_toolkits.mplot3d import Axes3D
+#from mpl_toolkits.mplot3d import Axes3D
 from sklearn.model_selection import train_test_split
 
 
@@ -39,14 +40,17 @@ individualFruitNames = dict(zip(fruitsData.fruit_label.unique(), fruitsData.frui
 #Scatter matrix checks whether numeric variables are correlated 
 #and if correlation is positive or negative
 
-# plotting a scatter matrix
 
 X = fruitsData[['height', 'width', 'mass', 'color_score']]
 y = fruitsData['fruit_label']
-XTrainSet, XTestSet, YTrainSet, YTestSet = train_test_split(X, y, random_state=0)
-colorMap = cm.get_cmap('gnuplot')
-scatterMatrix = scatter_matrix(XTrainSet, c= YTrainSet, marker = '*', s=40, hist_kwds={'bins':20}, figsize=(10,10), cmap=colorMap)
 
+#spliting dataset into training and test sets for exploratory purpose 
+XTrainSet, XTestSet, YTrainSet, YTestSet = train_test_split(X, y, random_state=0)
+
+colorMap = cm.get_cmap('gnuplot')
+
+# plotting a scatter matrix
+scatterMatrix = scatter_matrix(XTrainSet, c= YTrainSet, marker = '*', s=40, hist_kwds={'bins':20}, figsize=(10,10), cmap=colorMap)
 
 # 3D scatter plot
 fig = plt.figure(figsize=(16,16))
@@ -57,7 +61,18 @@ ax.set_ylabel('Fruit Height')
 ax.set_zlabel('color_score')
 plt.show()
 
+# After detecting the most prominent variables from our data visualization,
+#we select  mass, width, and height as features for our classification
+X = fruitsData[['mass', 'width', 'height']]
+y = fruitsData['fruit_label']
 
+#spliting dataset into training and test sets for classification purpose after choosing relevant vars
+#- 75/25 default if unspecified
+XTrainSet, XTestSet, YTrainSet, YTestSet = train_test_split(X, y, random_state=0)
+
+#choose a classifier
+
+knn = KNeighborsClassifier(n_neighbors = 5)
 
 
 
