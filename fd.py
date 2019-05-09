@@ -9,8 +9,11 @@ Created on Thu May  9 09:36:52 2019
 
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import cm
 import pandas as pd
+from pandas.plotting import scatter_matrix
 from sklearn.model_selection import train_test_split
+
 
 fruitsData = pd.read_table('fruit_data_with_colors.txt')
 
@@ -30,3 +33,37 @@ individualFruitNames = dict(zip(fruitsData.fruit_label.unique(), fruitsData.frui
 #heights -- how tall is the fruit 
 #widths -- how wide is the fruit
 #mass -- how heavy is the fruit
+
+#Feature exploration and Analyses
+#Scatter matrix checks whether numeric variables are correlated 
+#and if correlation is positive or negative
+
+# plotting a scatter matrix
+
+X = fruitsData[['height', 'width', 'mass', 'color_score']]
+y = fruitsData['fruit_label']
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
+colorMap = cm.get_cmap('gnuplot')
+scatterMatrix = scatter_matrix(X_train, c= y_train, marker = '*', s=40, hist_kwds={'bins':20}, figsize=(10,10), cmap=colorMap)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
