@@ -14,6 +14,7 @@ import pandas as pd
 from pandas.plotting import scatter_matrix
 from mpl_toolkits.mplot3d import Axes3D
 from sklearn.model_selection import train_test_split
+from sklearn.svm import LinearSVC
 
 fruitsData = pd.read_table('fruit_data_with_colors.txt')
 
@@ -106,6 +107,13 @@ knnClassifier.fit(XTrainSet, YTrainSet)
 #check mean accuracy on training data
 modelAccuracy = knnClassifier.score(XTrainSet, YTrainSet)
 print('Accuracy of KNN classifier :', modelAccuracy)
+
+#SVM Model - with regularization @5
+svmModel = LinearSVC(C=5, random_state = 67).fit(X_train, y_train)
+print('\n SVM model Coefficients:\n', svmModel.coef_)
+print('\n SVM Model Intercepts:\n', svmModel.intercept_)
+
+
 
 # Make predictions on unseen data. A small fruit with mass, width, height
 fruitPredict = knnClassifier.predict([[80, 5.3, 7.5]])
